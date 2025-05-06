@@ -9,7 +9,7 @@ import (
 func main() {
 	log.Println("🚀 Echo server firing up...")
 
-	listener, err := net.Listen("tcp", "127.0.0.1:7")
+	listener, err := net.Listen("tcp", ":7")
 
 	if err != nil {
 		log.Fatal(err)
