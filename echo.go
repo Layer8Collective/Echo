@@ -1,52 +1,44 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net"
 )
 
 func main() {
-	fmt.Println("🚀 Echo server going up... sit tight!")
+	log.Println("🚀 Echo server firing up...")
 
 	listener, err := net.Listen("tcp", "127.0.0.1:16000")
+
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
-	defer listener.Close()
-
-	done := make(chan struct{})
+	log.Println("Listening on: ", listener.Addr().String())
 
 	for {
-		defer func() { done <- struct{}{} }()
 		connection, err := listener.Accept()
-
+		log.Println("New Connection: ", connection.RemoteAddr())
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err.Error())
 		}
+		go func(connection net.Conn) {
 
-		go handleConnection(connection)
-	}
+			defer connection.Close()
+			for {
+				data := make([]byte, 1024)
 
-}
-func handleConnection(connection net.Conn) {
-	defer connection.Close()
+				n, err := connection.Read(data)
 
-	buffer := make([]byte, 1024)
-	for {
-		_, err := connection.Read(buffer)
-
-		if err != nil {
-			if err == io.EOF {
-				log.Println("Connection Closed")
-			} else {
-				log.Println("Error reading from connection: ", err)
+				if err != nil {
+					if err != io.EOF {
+						log.Print(err)
+					}
+					log.Println("FIN packet for: ", connection.RemoteAddr()," Closing the tcp session...")
+					return
+				}
+				connection.Write(data[:n])
 			}
-			return
-		}
-
-		log.Printf("Recieved: %s", string(buffer))
+		}(connection)
 	}
-
 }
