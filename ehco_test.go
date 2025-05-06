@@ -11,7 +11,7 @@ func TestMain(t *testing.T) {
 
 	time.Sleep(200 * time.Millisecond)
 
-	connection, err := net.Dial("tcp", "127.0.0.1:16000")
+	connection, err := net.Dial("tcp", "127.0.0.1:7")
 
 	if err != nil {
 		t.Fatal(err)
