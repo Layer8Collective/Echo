@@ -1,2 +1,2 @@
 # 🪞Echo
-[Echo](https://www.rfc-editor.org/rfc/rfc862) protocol, implemented based on TCP server.
+[Echo](https://www.rfc-editor.org/rfc/rfc862) protocol, implemented on the top of TCP server.
