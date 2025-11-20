@@ -13,13 +13,14 @@ func main() {
 	port := flag.String("port", "7", "port number to listen on")
 	flag.Parse()
 
-	log.Printf("🚀 Echo server using protocol %s on port %s...\n", *protocol, *port)
+	log.Printf("🚀 Echo %s server. on port %s...\n", *protocol, *port)
 
-	if *protocol == "tcp" {
+	switch *protocol {
+	case "tcp":
 		startTCPEchoServer(*port)
-	} else if *protocol == "udp" {
+	case "udp":
 		startUDPEchoServer(*port)
-	} else {
+	default:
 		log.Fatalf("Unknown protocol: %s. Use tcp or udp.", *protocol)
 	}
 }
